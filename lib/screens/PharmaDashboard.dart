@@ -35,9 +35,9 @@ class _ComingSoonScreenState extends State<ComingSoonScreen> {
           }
         },
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           margin: EdgeInsets.only(right: 5),
-          width: w*0.29,
+          width: w*0.288,
           decoration: BoxDecoration(
             color:(title=="Pharma")?Colors.blue: Color(0xffEFF4F8),
             borderRadius: BorderRadius.circular(7),

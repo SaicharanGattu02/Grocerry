@@ -13,9 +13,7 @@ class AppSettingsProvider extends ChangeNotifier {
       Map<String, dynamic> settingsData =
           await getAppSettings(context: context);
       if (settingsData[ApiAndParams.status].toString() == "1") {
-        SettingsData settings =
-            SettingsData.fromJson(settingsData[ApiAndParams.data]);
-
+        SettingsData settings = SettingsData.fromJson(settingsData[ApiAndParams.data]);
         Constant.favorits = settings.favoriteProductIds?.cast<int>() ?? [];
         Constant.currency = settings.currency ?? "";
         Constant.maxAllowItemsInCart = settings.maxCartItemsCount ?? "";

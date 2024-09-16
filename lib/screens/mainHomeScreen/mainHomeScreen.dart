@@ -1,6 +1,5 @@
 import 'package:egrocer/helper/utils/generalImports.dart';
 import 'package:geolocator/geolocator.dart';
-
 import '../PayjetUPI/PayjetDashboard.dart';
 import '../PharmaDashboard.dart';
 
@@ -199,7 +198,7 @@ class HomeMainScreenState extends State<HomeMainScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         margin: EdgeInsets.only(right: 5),
-        width: w*0.29,
+        width: w*0.288,
         decoration: BoxDecoration(
           color:(text=="Grocery")?Color(0xff37B67D): Color(0xffEFF4F8),
           borderRadius: BorderRadius.circular(7),

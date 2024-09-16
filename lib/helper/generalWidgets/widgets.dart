@@ -51,7 +51,7 @@ getDarkLightIcon({
   return defaultImg(
       height: height,
       width: width,
-      image: "$image$active${dark}_icon",
+      image: "$image${active}_icon",
       iconColor: iconColor,
       boxFit: boxFit,
       padding: padding);

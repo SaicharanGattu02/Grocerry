@@ -20,7 +20,6 @@ class _SplashScreenState
   @override
   void initState() {
     super.initState();
-
     Future.delayed(Duration.zero).then(
       (value) async {
         context.read<DeepLinkProvider>().getDeepLinkProvider().then((value) {
@@ -29,10 +28,6 @@ class _SplashScreenState
       },
     );
   }
-
-
-
-
 
   Future callAllApis() async {
     try {
