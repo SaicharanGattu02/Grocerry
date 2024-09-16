@@ -16,8 +16,6 @@ class _SplashScreenState
   late PackageInfo packageInfo;
   String currentAppVersion = "1.0.0";
 
-  // late Animation<double> animation;
-  // late AnimationController controller;
 
   @override
   void initState() {
