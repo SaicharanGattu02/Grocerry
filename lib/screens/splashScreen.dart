@@ -29,6 +29,7 @@ class _SplashScreenState
     );
   }
 
+
   Future callAllApis() async {
     try {
       context
