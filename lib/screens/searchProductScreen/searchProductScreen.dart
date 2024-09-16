@@ -14,6 +14,8 @@ class _ProductListScreenState extends State<ProductSearchScreen> {
   //give delay to live search
   Timer? delayTimer;
 
+
+
   ScrollController scrollController = ScrollController();
 
   scrollListener() async {
