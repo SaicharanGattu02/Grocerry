@@ -1,12 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:egrocer/helper/utils/generalImports.dart';
+import 'package:egrocer/screens/PayjetUPI/CreditCardBillPayment.dart';
+import 'package:egrocer/screens/PayjetUPI/MobileRecharge.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'DthRecharge.dart';
 import 'ElectricityBills.dart';
 import 'FastTagRecharge.dart';
 import 'GasBill.dart';
-
+import 'Profile.dart';
 
 class Mainhome extends StatefulWidget {
   final ScrollController scrollController;
@@ -16,71 +18,111 @@ class Mainhome extends StatefulWidget {
   State<Mainhome> createState() => _MainhomeState();
 }
 
-bool onclick = false;
-String profile_image = "";
-String name = "";
-bool _loading = true;
-int currentIndex = 0;
-
-final List<String> imgList = [
-  'assets/carosaal.png',
-  'assets/banner.png',
-  'assets/banner.png',
-];
-
-final List<Map<String, String>> items = [
-  {'image': 'assets/mobilerecharge.png', 'text': 'Mobile Recharge'},
-  {'image': 'assets/cardpayment.png', 'text': 'Card Payment'},
-  {'image': 'assets/moneytransfer.png', 'text': 'Money Transfer'},
-  {'image': 'assets/aadharpay.png', 'text': 'Aadhar Pay'},
-  {'image': 'assets/paymentgateway.png', 'text': 'Payment Gateway'},
-  {'image': 'assets/mobilerecharge.png', 'text': 'Post Paid'},
-  {'image': 'assets/Insurance.png', 'text': 'Insurance'},
-  {'image': 'assets/viewmore.png', 'text': 'View More'},
-];
-
-final List<Map<String, String>> items1 = [
-  {"image": "assets/electricity.png", "text": "Electricity"},
-  {"image": "assets/gas.png", "text": "Gas"},
-  {"image": "assets/dth.png", "text": "DTH"},
-  {"image": "assets/fastag.png", "text": "Fastag"},
-];
-
-
-void _navigateToScreens(BuildContext context, String text) {
-  Widget detailsScreen;
-
-  switch (text) {
-    case 'Electricity':
-      detailsScreen = Electricitybills();
-      break;
-    case 'Gas':
-      detailsScreen = GasBill();
-      break;
-    case 'DTH':
-      detailsScreen = DTHRecharge();
-      break;
-    case 'Fastag':
-      detailsScreen = FasTagRechrge();
-      break;
-    default:
-
-      detailsScreen = Scaffold(
-        appBar: AppBar(title: Text('Unknown')),
-        body: Center(child: Text('No details available')),
-      );
-  }
-
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => detailsScreen),
-  );
-}
-
-
-Future<void> _refreshData() async {}
 
 class _MainhomeState extends State<Mainhome> {
+
+  bool onclick = false;
+  String profile_image = "";
+  String name = "";
+  bool _loading = true;
+  int currentIndex = 0;
+
+  final List<String> imgList = [
+    'assets/carosaal.png',
+    'assets/banner.png',
+    'assets/banner.png',
+  ];
+
+  final List<Map<String, String>> items = [
+    {'image': 'assets/mobilerecharge.png', 'text': 'Mobile Recharge'},
+    {'image': 'assets/cardpayment.png', 'text': 'Card Payment'},
+    {'image': 'assets/moneytransfer.png', 'text': 'Money Transfer'},
+    {'image': 'assets/aadharpay.png', 'text': 'Aadhar Pay'},
+    {'image': 'assets/paymentgateway.png', 'text': 'Payment Gateway'},
+    {'image': 'assets/mobilerecharge.png', 'text': 'Post Paid'},
+    {'image': 'assets/Insurance.png', 'text': 'Insurance'},
+    {'image': 'assets/viewmore.png', 'text': 'View More'},
+  ];
+
+  void  _navigateToScreen(BuildContext context,String text){
+    Widget  navscreen;
+    switch (text) {
+      case 'Mobile Recharge':
+        navscreen = MobileRecharge();
+        break;
+      case 'Card Payment':
+        navscreen = CreditCardpayment();
+        break;
+      case 'Money Transfer':
+        navscreen = MobileRecharge();
+        break;
+      case 'Aadhar Pay':
+        navscreen = MobileRecharge();
+        break;
+      case 'Payment Gateway':
+        navscreen = MobileRecharge();
+        break;
+      case'Post Paid':
+        navscreen = MobileRecharge();
+        break;
+      case 'Insurance':
+        navscreen = MobileRecharge();
+        break;
+      case 'View More':
+        navscreen = MobileRecharge();
+        break;
+      default:
+        navscreen = Scaffold(
+          appBar: AppBar(title: Text('Unknown')),
+          body: Center(child: Text('No details available')),
+        );
+    }
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => navscreen),
+          );
+  }
+
+  final List<Map<String, String>> items1 = [
+    {"image": "assets/electricity.png", "text": "Electricity"},
+    {"image": "assets/gas.png", "text": "Gas"},
+    {"image": "assets/dth.png", "text": "DTH"},
+    {"image": "assets/fastag.png", "text": "Fastag"},
+  ];
+
+
+  void _navigateToScreens(BuildContext context, String text) {
+    Widget detailsScreen;
+
+    switch (text) {
+      case 'Electricity':
+        detailsScreen = Electricitybills();
+        break;
+      case 'Gas':
+        detailsScreen = GasBill();
+        break;
+      case 'DTH':
+        detailsScreen = DTHRecharge();
+        break;
+      case 'Fastag':
+        detailsScreen = FasTagRechrge();
+        break;
+      default:
+
+        detailsScreen = Scaffold(
+          appBar: AppBar(title: Text('Unknown')),
+          body: Center(child: Text('No details available')),
+        );
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => detailsScreen),
+    );
+  }
+
+
+  Future<void> _refreshData() async {}
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -88,22 +130,22 @@ class _MainhomeState extends State<Mainhome> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: h * 0.08,
-        backgroundColor: Colors.white,
+        toolbarHeight: h * 0.07,
         leadingWidth: 0,
         leading: Container(),
         title: Column(
           children: [
-            SizedBox(
-              height: h * 0.003,
-            ),
             Row(
               children: [
-                Image.asset(
-                  'assets/profile.png',
-                  fit: BoxFit.contain,
-                  height: 52,
-                  width: 52, // Adjust the height as needed
+                InkWell(onTap: (){
+                  Navigator.pushReplacementNamed(context, payjetprofile);
+                },
+                  child: Image.asset(
+                    'assets/profile.png',
+                    fit: BoxFit.contain,
+                    height: 52,
+                    width: 52, // Adjust the height as needed
+                  ),
                 ),
                 SizedBox(
                   width: w * 0.02,
@@ -166,7 +208,6 @@ class _MainhomeState extends State<Mainhome> {
         onRefresh: _refreshData,
         color: Color(0xFFF6821F),
         child: SingleChildScrollView(
-          controller: widget.scrollController, // Attach ScrollController here
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,12 +297,15 @@ class _MainhomeState extends State<Mainhome> {
                           final item = items[index];
                           return Column(
                             children: [
-                              Container(
-                                width: 45,
-                                height: 45,
-                                child: Image.asset(
-                                  item['image']!,
-                                  fit: BoxFit.cover,
+                              InkWell(onTap:()=> _navigateToScreen(context,item['text']!),
+
+                                child: Container(
+                                  width: 45,
+                                  height: 45,
+                                  child: Image.asset(
+                                    item['image']!,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 2),
@@ -659,33 +703,35 @@ class _MainhomeState extends State<Mainhome> {
 
 
       floatingActionButton: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        margin: EdgeInsets.only(top: 15),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+        margin: EdgeInsets.only(bottom: 10,top: 15),
         width: w* 0.35,
         height: 45,
         decoration: BoxDecoration(
           color: Color(0xff330066),
           borderRadius: BorderRadius.circular(7),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/scan.png",
-              width: 20,
-              height: 15,
-              fit: BoxFit.contain,
-            ),
-            SizedBox(width: w * 0.006),
-            Text(
-              "Scan Now",
-              style: TextStyle(
-                color: Color(0xffFFFFFF),
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/scan.png",
+                width: 20,
+                height: 15,
+                fit: BoxFit.fill,
               ),
-            ),
-          ],
+              SizedBox(width: w * 0.006),
+              Text(
+                "Scan Now",
+                style: TextStyle(
+                  color: Color(0xffFFFFFF),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
 

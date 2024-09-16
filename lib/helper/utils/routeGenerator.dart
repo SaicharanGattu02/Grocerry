@@ -1,6 +1,11 @@
 import 'package:egrocer/helper/utils/generalImports.dart';
+import 'package:egrocer/screens/PayjetUPI/ElectricityBills.dart';
+import 'package:egrocer/screens/PayjetUPI/FastTagRecharge.dart';
+import 'package:egrocer/screens/PayjetUPI/GasBill.dart';
+import 'package:egrocer/screens/PayjetUPI/Profile.dart';
 import 'package:flutter/cupertino.dart';
 import '../../provider/sellerProvider.dart';
+import '../../screens/PayjetUPI/DthRecharge.dart';
 import '../../screens/PayjetUPI/PayjetDashboard.dart';
 
 const String introSliderScreen = 'introSliderScreen';
@@ -42,6 +47,11 @@ const String phonePePaymentScreen = 'phonePePaymentScreen';
 const String cashfreePaymentScreen = 'cashfreePaymentScreen';
 const String walletRechargeScreen = 'walletRechargeScreen';
 const String ratingImageViewScreen = 'ratingImageViewScreen';
+const String payjetprofile = 'payjetprofile';
+const String payjetelectricity = 'payjetelectricity';
+const String payjetgas = 'payjetgas';
+const String payjetdth= 'payjetdth';
+const String payjetfastag= 'payjetfastag';
 
 String currentRoute = splashScreen;
 
@@ -62,7 +72,8 @@ class RouteGenerator {
 
       case loginScreen:
         return CupertinoPageRoute(
-          builder: (_) => LoginAccount(from: settings.arguments as String?),
+          builder: (_) =>
+              LoginAccount(from: settings.arguments as String?),
         );
 
       case otpScreen:
@@ -428,6 +439,43 @@ class RouteGenerator {
             ),
           ),
         );
+
+
+        //  PAYJET NAVIGATE SCREENS
+
+      case payjetprofile:
+        return CupertinoPageRoute(
+          builder: (_) =>
+       PayJetProfileScreen()
+        );
+
+      case payjetelectricity:
+        return CupertinoPageRoute(
+            builder: (_) =>
+                Electricitybills()
+        );
+
+      case payjetgas:
+        return CupertinoPageRoute(
+            builder: (_) =>
+                GasBill()
+        );
+      case payjetdth:
+        return CupertinoPageRoute(
+            builder: (_) =>
+                DTHRecharge()
+        );
+      case payjetfastag:
+        return CupertinoPageRoute(
+            builder: (_) =>
+                FasTagRechrge()
+        );
+
+
+
+
+
+
 
       default:
         // If there is no such named route in the switch statement, e.g. /third
