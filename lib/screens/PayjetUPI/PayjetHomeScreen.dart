@@ -2,9 +2,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'DthRecharge.dart';
+import 'ElectricityBills.dart';
+import 'FastTagRecharge.dart';
+import 'GasBill.dart';
+
 
 class Mainhome extends StatefulWidget {
-  const Mainhome({super.key});
+  final ScrollController scrollController;
+  const Mainhome({Key? key, required this.scrollController}) : super(key: key);
 
   @override
   State<Mainhome> createState() => _MainhomeState();
@@ -43,32 +49,32 @@ final List<Map<String, String>> items1 = [
 
 void _navigateToScreens(BuildContext context, String text) {
   Widget detailsScreen;
-  //
-  // switch (text) {
-  //   case 'Electricity':
-  //     detailsScreen = Electricitybills();
-  //     break;
-  //   case 'Gas':
-  //     detailsScreen = GasBill();
-  //     break;
-  //   case 'DTH':
-  //     detailsScreen = DTHRecharge();
-  //     break;
-  //   case 'Fastag':
-  //     detailsScreen = FasTagRechrge();
-  //     break;
-  //   default:
-  //
-  //     detailsScreen = Scaffold(
-  //       appBar: AppBar(title: Text('Unknown')),
-  //       body: Center(child: Text('No details available')),
-  //     );
-  // }
-  //
-  // Navigator.push(
-  //   context,
-  //   MaterialPageRoute(builder: (context) => detailsScreen),
-  // );
+
+  switch (text) {
+    case 'Electricity':
+      detailsScreen = Electricitybills();
+      break;
+    case 'Gas':
+      detailsScreen = GasBill();
+      break;
+    case 'DTH':
+      detailsScreen = DTHRecharge();
+      break;
+    case 'Fastag':
+      detailsScreen = FasTagRechrge();
+      break;
+    default:
+
+      detailsScreen = Scaffold(
+        appBar: AppBar(title: Text('Unknown')),
+        body: Center(child: Text('No details available')),
+      );
+  }
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => detailsScreen),
+  );
 }
 
 
@@ -160,6 +166,7 @@ class _MainhomeState extends State<Mainhome> {
         onRefresh: _refreshData,
         color: Color(0xFFF6821F),
         child: SingleChildScrollView(
+          controller: widget.scrollController, // Attach ScrollController here
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

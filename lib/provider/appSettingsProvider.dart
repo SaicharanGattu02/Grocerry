@@ -10,8 +10,7 @@ class AppSettingsProvider extends ChangeNotifier {
     settingsState = SettingsState.loading;
     notifyListeners();
     try {
-      Map<String, dynamic> settingsData =
-          await getAppSettings(context: context);
+      Map<String, dynamic> settingsData = await getAppSettings(context: context);
       if (settingsData[ApiAndParams.status].toString() == "1") {
         SettingsData settings = SettingsData.fromJson(settingsData[ApiAndParams.data]);
         Constant.favorits = settings.favoriteProductIds?.cast<int>() ?? [];

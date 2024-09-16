@@ -37,7 +37,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
       _validateEmail = _emailController.text.isEmpty || !RegExp(r'\S+@\S+\.\S+').hasMatch(_emailController.text) ? "Please enter a valid email address" : "";
       _isLoading = _validateEmail.isEmpty;
       if (_isLoading) {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>Mainhome()));
+
       }
     });
   }

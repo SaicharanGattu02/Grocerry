@@ -16,10 +16,29 @@ class PayjetDashboard extends StatefulWidget {
 class _DashboardState extends State<PayjetDashboard> {
   PageController pageController = PageController();
   int _selectedIndex = 0;
+  bool _isBottomBarVisible = true;
+  ScrollController _scrollController = ScrollController();
+  double _previousOffset = 0.0;
 
   @override
   void initState() {
     super.initState();
+
+    _scrollController.addListener(() {
+      double currentOffset = _scrollController.offset;
+      if (currentOffset > _previousOffset) {
+        // User is scrolling down
+        setState(() {
+          _isBottomBarVisible = false;
+        });
+      } else if (currentOffset < _previousOffset) {
+        // User is scrolling up
+        setState(() {
+          _isBottomBarVisible = true;
+        });
+      }
+      _previousOffset = currentOffset;
+    });
   }
 
   void onItemTapped(int selectedItems) {
@@ -28,17 +47,16 @@ class _DashboardState extends State<PayjetDashboard> {
       _selectedIndex = selectedItems;
     });
   }
-  List<ScrollController> scrollController = [
-    ScrollController(),
-    ScrollController(),
-    ScrollController(),
-    ScrollController()
-  ];
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return  WillPopScope(
+    return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
         return false;
@@ -48,15 +66,12 @@ class _DashboardState extends State<PayjetDashboard> {
           backgroundColor: Colors.white,
           leading: Container(),
           leadingWidth: 0,
-          title: Column(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  _buildTabButton('PayJet', 0,"assets/payjetlogo1.png"),
-                  _buildTabButton('Grocery', 1,"assets/grocery.png"),
-                  _buildTabButton('Pharma', 2,"assets/cap.png"),
-                ],
-              ),
+              _buildTabButton('PayJet', 0, "assets/payjetlogo1.png"),
+              _buildTabButton('Grocery', 1, "assets/grocery.png"),
+              _buildTabButton('Pharma', 2, "assets/cap.png"),
             ],
           ),
         ),
@@ -66,165 +81,169 @@ class _DashboardState extends State<PayjetDashboard> {
           },
           controller: pageController,
           children: [
-            Mainhome(),
+            Mainhome(scrollController: _scrollController),
           ],
           physics: const NeverScrollableScrollPhysics(),
         ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(25.0),
-              topRight: Radius.circular(25.0),
-            ),
-            boxShadow: [
-              BoxShadow(
-                offset: const Offset(0, -1),
-                blurRadius: 8,
-                color: Colors.black.withOpacity(0.1), // Optional: Adds shadow effect
+        bottomNavigationBar: AnimatedContainer(
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.easeInOut,
+          height: _isBottomBarVisible ? 80 : 0,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(25.0),
+                topRight: Radius.circular(25.0),
               ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(25.0),
-              topRight: Radius.circular(25.0),
-            ),
-            child: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.transparent, // Ensure transparency
-              selectedItemColor: Colors.black,
-              unselectedItemColor: Colors.black,
-              selectedFontSize: 12.0,
-              unselectedFontSize: 9.0,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              elevation: 0,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      _selectedIndex == 0
-                          ? Image.asset(
-                        'assets/activehome.png',
-                        width: 25,
-                        height: 25,
-                      )
-                          : Image.asset(
-                        'assets/inactivehome.png',
-                        width: 20,
-                        height: 20,
-                      ),
-                      Text(
-                        "Home",
-                        style: TextStyle(
-                          color: _selectedIndex == 0
-                              ? Color(0xff330066)
-                              : Color(0xff000000),
-                        ),
-                      ),
-                    ],
-                  ),
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      _selectedIndex == 1
-                          ? Image.asset(
-                        'assets/activedoc.png',
-                        width: 25,
-                        height: 25,
-                      )
-                          : Image.asset(
-                        'assets/inactiveDoc.png',
-                        width: 20,
-                        height: 20,
-                      ),
-                      Text(
-                        "Epos Settlement",
-                        style: TextStyle(
-                          color: _selectedIndex == 1
-                              ? Color(0xff330066)
-                              : Color(0xff000000),
-                        ),
-                      ),
-                    ],
-                  ),
-                  label: 'Epos Settlement',
-                ),
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      _selectedIndex == 2
-                          ? Image.asset(
-                        'assets/activeabout.png',
-                        width: 25,
-                        height: 25,
-                        color: _selectedIndex == 2
-                            ? Color(0xff330066)
-                            : Color(0xff00000),
-                      )
-                          : Image.asset(
-                        'assets/about.png',
-                        width: 20,
-                        height: 20,
-                      ),
-                      Text(
-                        "Complain",
-                        style: TextStyle(
-                          color: _selectedIndex == 2
-                              ? Color(0xff330066)
-                              : Color(0xff000000),
-                        ),
-                      ),
-                    ],
-                  ),
-                  label: 'Complain',
-                ),
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      _selectedIndex == 3
-                          ? Image.asset(
-                        'assets/activeperson.png',
-                        width: 25,
-                        height: 25,
-                        color: _selectedIndex == 3
-                            ? Color(0xff330066)
-                            : Color(0xff00000),
-                      )
-                          : Image.asset(
-                        'assets/inactiveperson.png',
-                        width: 20,
-                        height: 20,
-                      ),
-                      Text(
-                        "Payout",
-                        style: TextStyle(
-                          color: _selectedIndex == 3
-                              ? Color(0xff330066)
-                              : Color(0xff000000),
-                        ),
-                      ),
-                    ],
-                  ),
-                  label: 'Payout',
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(0, -1),
+                  blurRadius: 8,
+                  color: Colors.black.withOpacity(0.1), // Optional: Adds shadow effect
                 ),
               ],
-              currentIndex: _selectedIndex,
-              onTap: onItemTapped,
+            ),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(25.0),
+                topRight: Radius.circular(25.0),
+              ),
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Colors.transparent, // Ensure transparency
+                selectedItemColor: Colors.black,
+                unselectedItemColor: Colors.black,
+                selectedFontSize: 12.0,
+                unselectedFontSize: 9.0,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                elevation: 0,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Column(
+                      children: [
+                        _selectedIndex == 0
+                            ? Image.asset(
+                          'assets/activehome.png',
+                          width: 25,
+                          height: 25,
+                        )
+                            : Image.asset(
+                          'assets/inactivehome.png',
+                          width: 20,
+                          height: 20,
+                        ),
+                        Text(
+                          "Home",
+                          style: TextStyle(
+                            color: _selectedIndex == 0
+                                ? Color(0xff330066)
+                                : Color(0xff000000),
+                          ),
+                        ),
+                      ],
+                    ),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Column(
+                      children: [
+                        _selectedIndex == 1
+                            ? Image.asset(
+                          'assets/activedoc.png',
+                          width: 25,
+                          height: 25,
+                        )
+                            : Image.asset(
+                          'assets/inactiveDoc.png',
+                          width: 20,
+                          height: 20,
+                        ),
+                        Text(
+                          "Epos Settlement",
+                          style: TextStyle(
+                            color: _selectedIndex == 1
+                                ? Color(0xff330066)
+                                : Color(0xff000000),
+                          ),
+                        ),
+                      ],
+                    ),
+                    label: 'Epos Settlement',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Column(
+                      children: [
+                        _selectedIndex == 2
+                            ? Image.asset(
+                          'assets/activeabout.png',
+                          width: 25,
+                          height: 25,
+                          color: _selectedIndex == 2
+                              ? Color(0xff330066)
+                              : Color(0xff00000),
+                        )
+                            : Image.asset(
+                          'assets/about.png',
+                          width: 20,
+                          height: 20,
+                        ),
+                        Text(
+                          "Complain",
+                          style: TextStyle(
+                            color: _selectedIndex == 2
+                                ? Color(0xff330066)
+                                : Color(0xff000000),
+                          ),
+                        ),
+                      ],
+                    ),
+                    label: 'Complain',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Column(
+                      children: [
+                        _selectedIndex == 3
+                            ? Image.asset(
+                          'assets/activeperson.png',
+                          width: 25,
+                          height: 25,
+                          color: _selectedIndex == 3
+                              ? Color(0xff330066)
+                              : Color(0xff00000),
+                        )
+                            : Image.asset(
+                          'assets/inactiveperson.png',
+                          width: 20,
+                          height: 20,
+                        ),
+                        Text(
+                          "Payout",
+                          style: TextStyle(
+                            color: _selectedIndex == 3
+                                ? Color(0xff330066)
+                                : Color(0xff000000),
+                          ),
+                        ),
+                      ],
+                    ),
+                    label: 'Payout',
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                onTap: onItemTapped,
+              ),
             ),
           ),
         ),
-
       ),
     );
-
   }
-  Widget _buildTabButton(String text, int index,String asset) {
-    var h=MediaQuery.of(context).size.height;
-    var w=MediaQuery.of(context).size.width;
+
+  Widget _buildTabButton(String text, int index, String asset) {
+    var h = MediaQuery.of(context).size.height;
+    var w = MediaQuery.of(context).size.width;
     return InkResponse(
       onTap: () {
         if (index == 0) {
@@ -247,22 +266,24 @@ class _DashboardState extends State<PayjetDashboard> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         margin: EdgeInsets.only(right: 5),
-        width: w*0.288,
+        width: w * 0.288,
         decoration: BoxDecoration(
-          color:(text=="PayJet")?Color(0xff330066): Color(0xffEFF4F8),
+          color: (text == "PayJet") ? Color(0xff330066) : Color(0xffEFF4F8),
           borderRadius: BorderRadius.circular(7),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(asset,
-                width: 20, height: 15, fit: BoxFit.cover),
+            Image.asset(asset, width: 20, height: 15, fit: BoxFit.cover),
             SizedBox(width: w * 0.02),
-            Text(text,
-                style: TextStyle(
-                    color:(text=="PayJet")?Colors.white: Color(0xff161531),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400)),
+            Text(
+              text,
+              style: TextStyle(
+                color: (text == "PayJet") ? Colors.white : Color(0xff161531),
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ],
         ),
       ),

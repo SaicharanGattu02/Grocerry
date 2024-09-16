@@ -108,7 +108,7 @@ class RouteGenerator {
 
       case mainHomeScreen:
         return CupertinoPageRoute(
-          builder: (_) => PayjetDashboard(/*key: Constant.navigatorKay*/),
+          builder: (_) => PayjetDashboard(),
         );
 
       case categoryListScreen:
