@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "964965168805",
+    "project_id": "payjet-bc921",
+    "storage_bucket": "payjet-bc921.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964965168805:android:45fc5d1b4017a363cbff4c",
+        "android_client_info": {
+          "package_name": "com.pay.jet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8OXXVmzmgtnuZ0GqPO6niXj774LutKkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
