@@ -148,7 +148,6 @@ class _DashboardState extends State<PayjetDashboard> {
                     ),
                     label: 'Home',
                   ),
-
                   BottomNavigationBarItem(
                     icon: Column(
                       children: [
