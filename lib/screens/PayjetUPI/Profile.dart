@@ -1,3 +1,4 @@
+import 'package:egrocer/screens/PayjetUPI/services/userapi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,26 @@ class PayJetProfileScreen extends StatefulWidget {
 }
 
 class _PayJetProfileScreenState extends State<PayJetProfileScreen> {
+  bool is_Loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    GetProfileDetails();
+  }
+  Future<void> GetProfileDetails() async {
+    final response = await Userapi.GetUserProfileData();
+    if (response != null) {
+      setState(() {
+        is_Loading=false;
+      });
+    }else{
+      setState(() {
+        is_Loading=false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;

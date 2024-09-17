@@ -1,8 +1,9 @@
+import 'package:egrocer/screens/PayjetUPI/services/Preferances.dart';
+import 'package:egrocer/screens/PayjetUPI/services/userapi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../helper/utils/ShakeWidget.dart';
-
+import '../../models/languageJsonData.dart';
 
 class MobileRecharge extends StatefulWidget {
   const MobileRecharge({super.key});
@@ -13,16 +14,33 @@ class MobileRecharge extends StatefulWidget {
 
 class _MobileRechargeState extends State<MobileRecharge> {
   final TextEditingController _mobileNumberController = TextEditingController();
-  final TextEditingController _selectOperatorController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _tpinController = TextEditingController();
 
+  String _selectedOperator = "";
   String _validateMobileNumber = "";
   String _validateAmount = "";
   String _validateOperator = "";
   String _validateTpin = "";
 
   bool _isLoading = false;
+
+  // List of operators for the dropdown
+  List<Data>? _operators =[];
+
+  Future<void> GetOperateDetails() async {
+    var accessToken = await PreferenceService().getString("access_token");
+    if (accessToken != null) {
+      final response = await Userapi.OperatoerDetailsApi(accessToken);
+
+      if (response != null) {
+        setState(() {
+          // _operators = response.data ?? ;
+        });
+      }
+    }
+  }
+
 
   void _validateFields() {
     setState(() {
@@ -34,7 +52,7 @@ class _MobileRechargeState extends State<MobileRecharge> {
           double.tryParse(_amountController.text) == null
           ? "Please enter a valid amount"
           : "";
-      _validateOperator = _selectOperatorController.text.isEmpty
+      _validateOperator = _selectedOperator.isEmpty
           ? "Please select your operator"
           : "";
       _validateTpin = _tpinController.text.isEmpty ||
@@ -53,6 +71,10 @@ class _MobileRechargeState extends State<MobileRecharge> {
     });
   }
 
+
+
+
+
   @override
   void initState() {
     super.initState();
@@ -60,12 +82,6 @@ class _MobileRechargeState extends State<MobileRecharge> {
     _mobileNumberController.addListener(() {
       setState(() {
         _validateMobileNumber = "";
-      });
-    });
-
-    _selectOperatorController.addListener(() {
-      setState(() {
-        _validateOperator = "";
       });
     });
 
@@ -80,6 +96,7 @@ class _MobileRechargeState extends State<MobileRecharge> {
         _validateTpin = "";
       });
     });
+    GetOperateDetails();
   }
 
   @override
@@ -88,7 +105,6 @@ class _MobileRechargeState extends State<MobileRecharge> {
 
     return Scaffold(
       appBar: AppBar(
-
         title: const Text(
           "Mobile Recharge",
           style: TextStyle(
@@ -114,12 +130,7 @@ class _MobileRechargeState extends State<MobileRecharge> {
                       keyboardType: TextInputType.phone,
                     ),
                     _buildSectionLabel("Select Your Operator"),
-                    _buildTextFormField(
-                      controller: _selectOperatorController,
-                      label: 'Select your operator',
-                      validation: _validateOperator,
-                      suffixIcon: const Icon(Icons.keyboard_arrow_down),
-                    ),
+                    _buildDropdownField(),
                     _buildSectionLabel("Amount"),
                     _buildTextFormField(
                       controller: _amountController,
@@ -297,4 +308,72 @@ class _MobileRechargeState extends State<MobileRecharge> {
       ),
     );
   }
+
+  // Dropdown field for selecting an operator
+  Widget _buildDropdownField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          DropdownButtonFormField<String>(
+            value: _selectedOperator.isEmpty ? null : _selectedOperator,
+            hint: const Text(
+              'Select your operator',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                fontFamily: "Inter",
+                color: Color(0xff8298AF),
+              ),
+            ),
+            items: _operators,
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedOperator = newValue ?? "";
+                _validateOperator = ""; // Reset validation error
+              });
+            },
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: const Color(0xffF2F8FF),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: const BorderSide(width: 1, color: Color(0xff8298AF)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: const BorderSide(width: 1, color: Color(0xff8298AF)),
+              ),
+            ),
+          ),
+          if (_validateOperator.isNotEmpty) ...[
+            Container(
+              alignment: Alignment.topLeft,
+              margin: const EdgeInsets.only(left: 8, bottom: 10, top: 5),
+              width: MediaQuery.of(context).size.width * 0.6,
+              child: ShakeWidget(
+                key: const Key("validation"),
+                duration: const Duration(milliseconds: 700),
+                child: Text(
+                  _validateOperator,
+                  style: const TextStyle(
+                    fontFamily: "Poppins",
+                    fontSize: 12,
+                    color: Colors.red,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          ] else ...[
+            const SizedBox(height: 15),
+          ]
+        ],
+      ),
+    );
+  }
+
+
 }
