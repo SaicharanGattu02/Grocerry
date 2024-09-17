@@ -21,7 +21,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final FocusNode focusNodeOTP = FocusNode();
+
 
 
 
@@ -542,6 +542,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       context: context,
       builder: (BuildContext context) {
         final TextEditingController otpController = TextEditingController();
+        final FocusNode focusNodeOTP = FocusNode();
         return
           AlertDialog(
             contentPadding: EdgeInsets.all(16),
@@ -619,6 +620,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     alignment: Alignment.centerRight,
                     child: InkWell(
                       onTap: () {
+
+                        RegisterApi();
                       },
                       child: Text(
                         "Resend OTP",

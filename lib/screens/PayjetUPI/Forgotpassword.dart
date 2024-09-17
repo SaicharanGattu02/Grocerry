@@ -1,4 +1,5 @@
 import 'package:egrocer/screens/PayjetUPI/PayjetHomeScreen.dart';
+import 'package:egrocer/screens/PayjetUPI/services/userapi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,9 +39,33 @@ class _ForgotpasswordState extends State<Forgotpassword> {
       _isLoading = _validateEmail.isEmpty;
       if (_isLoading) {
 
+        ForgetApi();
+
+      }else{
+        _isLoading=false;
       }
     });
   }
+
+
+  Future<void> ForgetApi() async{
+    String email =_emailController.text;
+    final res = await Userapi.ForgetPasswordApi(email);
+    if(res!= null){
+      setState(() {
+        _isLoading=false;
+      });
+      print("forget done");
+
+
+    }else{
+      setState(() {
+        _isLoading=false;
+      });
+      print("forget failure");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,10 +133,20 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                         ),
                       ],
                     ),
-                    child: GestureDetector(
-                      onTap: _validateFields,
+                    child: InkWell(onTap: (){
+                      if(_isLoading){
+
+                      }else{
+                        setState(() {
+                          _isLoading=true;
+                        });
+                        _validateFields();
+
+                      }
+                    },
                       child: Center(
-                        child: Text(
+                        child: _isLoading ? CircularProgressIndicator(color: Color(0xffffffff),):
+                        Text(
                           'SEND CODE',
                           style: TextStyle(
                             color: Colors.white,

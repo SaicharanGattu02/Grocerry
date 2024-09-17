@@ -137,4 +137,78 @@ class Userapi {
     }
   }
 
+
+  static Future<LogInModel?> ForgetPasswordApi(
+
+      String email,
+     ) async {
+
+
+    try {
+      final body = jsonEncode({
+        "email": email,
+
+      });
+      print(" body>>${body}");
+      final headers = {'Content-Type': 'application/json'};
+      String url ="${host}/api/password/send-otp";
+      print("${url}");
+
+      http.Response response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+      if (response.body != null) {
+        final jsonResponse = jsonDecode(response.body);
+        print("Register Data:${response.body}");
+        return LogInModel.fromJson(jsonResponse);
+      }
+    } catch (e) {
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+
+  static Future<LogInModel?> MobileRechargeApi(
+
+      String utilityacntno,
+      String amount,
+      String confirmation_mobile_no,
+      String operator_id,
+      ) async {
+
+
+    try {
+      final body = jsonEncode({
+        "utility_ac_no": utilityacntno,
+        "amount": amount,
+        "confirmation_mobile_no": confirmation_mobile_no,
+        "operator_id":operator_id,
+
+      });
+      print(" body>>${body}");
+      final headers = {'Content-Type': 'application/json'};
+      String url ="${host}/api/password/send-otp";
+      print("${url}");
+
+      http.Response response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+      if (response.body != null) {
+        final jsonResponse = jsonDecode(response.body);
+        print("Recharge:${response.body}");
+        return LogInModel.fromJson(jsonResponse);
+      }
+    } catch (e) {
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+
+
 }

@@ -1,6 +1,9 @@
+import 'package:egrocer/screens/PayjetUPI/PayjetDashboard.dart';
+import 'package:egrocer/screens/PayjetUPI/services/Preferances.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'PayjetHomeScreen.dart';
 import 'Register.dart';
 
 
@@ -29,11 +32,19 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
     _controller.forward();
+   var  token = PreferenceService().getString("access_token");
+
 
     // Navigate to the next screen after the animation
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Future.delayed(Duration(seconds: 3), () {
-         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => RegistrationScreen()));
+        if(token == null){
+          print("Token>>>${token}");
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => RegistrationScreen()));
+        }else{
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => PayjetDashboard()));
+        }
+
       });
     });
 

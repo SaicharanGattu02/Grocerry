@@ -1,3 +1,4 @@
+import 'package:egrocer/screens/PayjetUPI/Forgotpassword.dart';
 import 'package:egrocer/screens/PayjetUPI/PayjetDashboard.dart';
 import 'package:egrocer/screens/PayjetUPI/services/Preferances.dart';
 import 'package:egrocer/screens/PayjetUPI/services/userapi.dart';
@@ -121,13 +122,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Align(
                       alignment: Alignment.topRight,
-                      child: Text(
-                        "Forgot Password",
-                        style: TextStyle(
-                            fontFamily: "Inter",
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xff330066)),
+                      child: InkWell(onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Forgotpassword()));
+                      },
+                        child: Text(
+                          "Forgot Password",
+                          style: TextStyle(
+                              fontFamily: "Inter",
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xff330066)),
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),

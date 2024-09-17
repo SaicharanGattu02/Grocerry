@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:egrocer/helper/utils/generalImports.dart';
 import 'package:egrocer/screens/PayjetUPI/CreditCardBillPayment.dart';
+import 'package:egrocer/screens/PayjetUPI/Login.dart';
 import 'package:egrocer/screens/PayjetUPI/MobileRecharge.dart';
+import 'package:egrocer/screens/PayjetUPI/services/Preferances.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'DthRecharge.dart';
@@ -25,8 +27,10 @@ class _MainhomeState extends State<Mainhome> {
   bool onclick = false;
   String profile_image = "";
   String name = "";
+  String Accesstoken = "";
   bool _loading = true;
   int currentIndex = 0;
+
 
   final List<String> imgList = [
     'assets/carosaal.png',
@@ -195,10 +199,17 @@ class _MainhomeState extends State<Mainhome> {
                   width: 24,
                 ),
                 SizedBox(width: w * 0.025),
-                Image.asset(
-                  "assets/menubar.png",
-                  height: 24,
-                  width: 24,
+                InkWell(onTap: (){
+                 PreferenceService().remove("access_token");
+               var  Accesstoken=PreferenceService().getString("access_token");
+                 print("hii >>>${Accesstoken}");
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                },
+                  child: Image.asset(
+                    "assets/menubar.png",
+                    height: 24,
+                    width: 24,
+                  ),
                 ),
               ],
             ),
