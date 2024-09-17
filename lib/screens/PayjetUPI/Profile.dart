@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'others/dottedborder.dart';
 
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class PayJetProfileScreen extends StatefulWidget {
+  const PayJetProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<PayJetProfileScreen> createState() => _PayJetProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _PayJetProfileScreenState extends State<PayJetProfileScreen> {
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;

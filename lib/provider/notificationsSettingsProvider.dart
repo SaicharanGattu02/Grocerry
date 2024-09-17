@@ -16,9 +16,7 @@ class NotificationsSettingsProvider extends ChangeNotifier {
   List<int> mailSettings = [];
   List<int> mobileSettings = [];
 
-  Future getAppNotificationSettingsApiProvider(
-      {required Map<String, String> params,
-      required BuildContext context}) async {
+  Future getAppNotificationSettingsApiProvider({required Map<String, String> params, required BuildContext context}) async {
     try {
       notificationsSettingsState = NotificationsSettingsState.loading;
       notifyListeners();

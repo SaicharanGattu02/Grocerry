@@ -131,17 +131,19 @@ class _DashboardState extends State<PayjetDashboard> {
                         )
                             : Image.asset(
                           'assets/inactivehome.png',
-                          width: 20,
-                          height: 20,
+                          width: 25,
+                          height: 25,
                         ),
-                        Text(
-                          "Home",
-                          style: TextStyle(
-                            color: _selectedIndex == 0
-                                ? Color(0xff330066)
-                                : Color(0xff000000),
+                        if (_selectedIndex == 0) ...[
+                          Text(
+                            "Home",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                fontFamily: "Inter",
+                                color: Color(0xff330066)),
                           ),
-                        ),
+                        ]
                       ],
                     ),
                     label: 'Home',
@@ -158,17 +160,19 @@ class _DashboardState extends State<PayjetDashboard> {
                         )
                             : Image.asset(
                           'assets/inactiveDoc.png',
-                          width: 20,
-                          height: 20,
+                          width: 25,
+                          height: 25,
                         ),
-                        Text(
-                          "Epos Settlement",
-                          style: TextStyle(
-                            color: _selectedIndex == 1
-                                ? Color(0xff330066)
-                                : Color(0xff000000),
+                        if (_selectedIndex == 1) ...[
+                          Text(
+                            "Settlement",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                fontFamily: "Inter",
+                                color: Color(0xff330066)),
                           ),
-                        ),
+                        ]
                       ],
                     ),
                     label: 'Epos Settlement',
@@ -187,17 +191,19 @@ class _DashboardState extends State<PayjetDashboard> {
                         )
                             : Image.asset(
                           'assets/about.png',
-                          width: 20,
-                          height: 20,
+                          width: 25,
+                          height: 25,
                         ),
-                        Text(
-                          "Complain",
-                          style: TextStyle(
-                            color: _selectedIndex == 2
-                                ? Color(0xff330066)
-                                : Color(0xff000000),
+                        if (_selectedIndex == 2) ...[
+                          Text(
+                            "Complain",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                fontFamily: "Inter",
+                                color: Color(0xff330066)),
                           ),
-                        ),
+                        ]
                       ],
                     ),
                     label: 'Complain',
@@ -216,17 +222,19 @@ class _DashboardState extends State<PayjetDashboard> {
                         )
                             : Image.asset(
                           'assets/inactiveperson.png',
-                          width: 20,
-                          height: 20,
+                          width: 25,
+                          height: 25,
                         ),
-                        Text(
-                          "Payout",
-                          style: TextStyle(
-                            color: _selectedIndex == 3
-                                ? Color(0xff330066)
-                                : Color(0xff000000),
+                        if (_selectedIndex == 3) ...[
+                          Text(
+                            "Payout",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                fontFamily: "Inter",
+                                color: Color(0xff330066)),
                           ),
-                        ),
+                        ]
                       ],
                     ),
                     label: 'Payout',

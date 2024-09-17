@@ -90,11 +90,7 @@ class _GasBillState extends State<GasBill> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.arrow_back_sharp,
-          color: const Color(0xff1F1F1F),
-          size: 24,
-        ),
+
         title: const Text(
           "Gas Bills",
           style: TextStyle(

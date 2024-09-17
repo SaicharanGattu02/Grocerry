@@ -100,11 +100,7 @@ class _CreditCardpaymentState extends State<CreditCardpayment> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.arrow_back_sharp,
-          color: const Color(0xff1F1F1F),
-          size: 24,
-        ),
+
         title: const Text(
           "Credit Card Bill Payment",
           style: TextStyle(
