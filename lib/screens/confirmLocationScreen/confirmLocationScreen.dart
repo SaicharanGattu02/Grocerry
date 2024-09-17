@@ -26,7 +26,6 @@ class _ConfirmLocationState extends State<ConfirmLocation> {
   @override
   void initState() {
     super.initState();
-
     kMapCenter = LatLng(0.0, 0.0);
     Future.delayed(Duration.zero).then((value) async {
       googleMapCurrentStyle =
@@ -100,7 +99,6 @@ class _ConfirmLocationState extends State<ConfirmLocation> {
     setMarkerIcon();
     controller.animateCamera(CameraUpdate.newCameraPosition(kGooglePlex));
   }
-
   setMarkerIcon() async {
     MarkerGenerator(
       const MapDeliveredMarker(),

@@ -1,4 +1,5 @@
 import 'package:egrocer/helper/utils/generalImports.dart';
+import 'package:egrocer/screens/PayjetUPI/PayJetSplashScreen.dart';
 import 'package:egrocer/screens/PayjetUPI/Register.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -264,7 +265,7 @@ class MyAppState extends State<MyApp> {
                     GlobalMaterialLocalizations.delegate,
                     GlobalWidgetsLocalizations.delegate,
                   ],
-                  home:SplashScreen()
+                  home:Splash()
                 ),
               );
             },
