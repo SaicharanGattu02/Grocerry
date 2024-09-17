@@ -2,10 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'CreditCardBillPayment.dart';
 import 'DthRecharge.dart';
 import 'ElectricityBills.dart';
 import 'FastTagRecharge.dart';
 import 'GasBill.dart';
+import 'MobileRecharge.dart';
 
 
 class Mainhome extends StatefulWidget {
@@ -63,6 +65,30 @@ void _navigateToScreens(BuildContext context, String text) {
     case 'Fastag':
       detailsScreen = FasTagRechrge();
       break;
+    case 'Mobile Recharge':
+      detailsScreen = MobileRecharge();
+      break;
+    case 'Card Payment':
+      detailsScreen = CreditCardpayment();
+      break;
+    case 'Money Transfer':
+      detailsScreen = MobileRecharge();
+      break;
+    case 'Aadhar Pay':
+      detailsScreen = MobileRecharge();
+      break;
+    case 'Payment Gateway':
+      detailsScreen = MobileRecharge();
+      break;
+    case 'Post Paid':
+      detailsScreen = MobileRecharge();
+      break;
+    case 'Insurance':
+      detailsScreen = MobileRecharge();
+      break;
+    case 'View More':
+      detailsScreen = MobileRecharge();
+      break;
     default:
 
       detailsScreen = Scaffold(
@@ -76,6 +102,8 @@ void _navigateToScreens(BuildContext context, String text) {
     MaterialPageRoute(builder: (context) => detailsScreen),
   );
 }
+
+
 
 
 Future<void> _refreshData() async {}
@@ -254,31 +282,36 @@ class _MainhomeState extends State<Mainhome> {
                         itemCount: items.length,
                         itemBuilder: (context, index) {
                           final item = items[index];
-                          return Column(
-                            children: [
-                              Container(
-                                width: 45,
-                                height: 45,
-                                child: Image.asset(
-                                  item['image']!,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              SizedBox(height: 2),
-                              Container(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  item['text']!,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Inter",
-                                    fontSize: 12,
+                          return InkResponse(
+                            onTap: (){
+                              _navigateToScreens(context,item['text']!);
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 45,
+                                  height: 45,
+                                  child: Image.asset(
+                                    item['image']!,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 2),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    item['text']!,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: "Inter",
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           );
                         },
                       ),
