@@ -1,16 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:egrocer/helper/utils/generalImports.dart';
 import 'package:egrocer/screens/PayjetUPI/CreditCardBillPayment.dart';
-import 'package:egrocer/screens/PayjetUPI/Login.dart';
 import 'package:egrocer/screens/PayjetUPI/MobileRecharge.dart';
-import 'package:egrocer/screens/PayjetUPI/services/Preferances.dart';
+import 'package:egrocer/screens/PayjetUPI/model/BannersModel.dart';
+import 'package:egrocer/screens/PayjetUPI/services/userapi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'DthRecharge.dart';
 import 'ElectricityBills.dart';
 import 'FastTagRecharge.dart';
 import 'GasBill.dart';
-import 'Profile.dart';
+import 'MoneyTransfer.dart';
+
 
 class Mainhome extends StatefulWidget {
   final ScrollController scrollController;
@@ -27,10 +28,8 @@ class _MainhomeState extends State<Mainhome> {
   bool onclick = false;
   String profile_image = "";
   String name = "";
-  String Accesstoken = "";
   bool _loading = true;
   int currentIndex = 0;
-
 
   final List<String> imgList = [
     'assets/carosaal.png',
@@ -52,6 +51,18 @@ class _MainhomeState extends State<Mainhome> {
   void  _navigateToScreen(BuildContext context,String text){
     Widget  navscreen;
     switch (text) {
+      case 'Electricity':
+        navscreen = Electricitybills();
+        break;
+      case 'Gas':
+        navscreen = GasBill();
+        break;
+      case 'DTH':
+        navscreen = DTHRecharge();
+        break;
+      case 'Fastag':
+        navscreen = FasTagRechrge();
+        break;
       case 'Mobile Recharge':
         navscreen = MobileRecharge();
         break;
@@ -59,7 +70,7 @@ class _MainhomeState extends State<Mainhome> {
         navscreen = CreditCardpayment();
         break;
       case 'Money Transfer':
-        navscreen = MobileRecharge();
+        navscreen = Moneytransfer();
         break;
       case 'Aadhar Pay':
         navscreen = MobileRecharge();
@@ -95,39 +106,29 @@ class _MainhomeState extends State<Mainhome> {
     {"image": "assets/fastag.png", "text": "Fastag"},
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    GetBanners();
+  }
+  bool is_Loading = false;
 
-  void _navigateToScreens(BuildContext context, String text) {
-    Widget detailsScreen;
+  List<Data> data=[];
+  Future<void> GetBanners() async {
+    final response = await Userapi.GetBannersApi();
+    if (response != null) {
+      if(response.status==true){
+        data=response.data??[];
+      }
+    }else{
 
-    switch (text) {
-      case 'Electricity':
-        detailsScreen = Electricitybills();
-        break;
-      case 'Gas':
-        detailsScreen = GasBill();
-        break;
-      case 'DTH':
-        detailsScreen = DTHRecharge();
-        break;
-      case 'Fastag':
-        detailsScreen = FasTagRechrge();
-        break;
-      default:
-
-        detailsScreen = Scaffold(
-          appBar: AppBar(title: Text('Unknown')),
-          body: Center(child: Text('No details available')),
-        );
     }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => detailsScreen),
-    );
   }
 
+  Future<void> _refreshData() async {
+    GetBanners();
+  }
 
-  Future<void> _refreshData() async {}
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -143,7 +144,7 @@ class _MainhomeState extends State<Mainhome> {
             Row(
               children: [
                 InkWell(onTap: (){
-                  Navigator.pushReplacementNamed(context, payjetprofile);
+                  Navigator.pushNamed(context, payjetprofile);
                 },
                   child: Image.asset(
                     'assets/profile.png',
@@ -199,17 +200,10 @@ class _MainhomeState extends State<Mainhome> {
                   width: 24,
                 ),
                 SizedBox(width: w * 0.025),
-                InkWell(onTap: (){
-                 PreferenceService().remove("access_token");
-               var  Accesstoken=PreferenceService().getString("access_token");
-                 print("hii >>>${Accesstoken}");
-                 Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-                },
-                  child: Image.asset(
-                    "assets/menubar.png",
-                    height: 24,
-                    width: 24,
-                  ),
+                Image.asset(
+                  "assets/menubar.png",
+                  height: 24,
+                  width: 24,
                 ),
               ],
             ),
@@ -238,7 +232,7 @@ class _MainhomeState extends State<Mainhome> {
                     });
                   },
                 ),
-                items: imgList.map((item) {
+                items: data.map((item) {
                   return InkWell(
                     onTap: () async {
                       // Your onTap functionality here
@@ -247,8 +241,7 @@ class _MainhomeState extends State<Mainhome> {
                       builder: (BuildContext context) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Image.asset(
-                            item,
+                          child: Image.network(item.toString(),
                             fit: BoxFit.contain,
                             height: 112,
                           ),
@@ -561,7 +554,7 @@ class _MainhomeState extends State<Mainhome> {
                               itemCount: items1.length,
                               itemBuilder: (context, index) {
                                 final item =items1[index];
-                                return InkWell(onTap:()=> _navigateToScreens(context,item['text']!),
+                                return InkWell(onTap:()=> _navigateToScreen(context,item['text']!),
                                   child: AspectRatio(
                                     aspectRatio:
                                     0.99, // Aspect ratio (you can adjust this)

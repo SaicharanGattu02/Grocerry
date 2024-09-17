@@ -222,8 +222,7 @@ class RouteGenerator {
         );
 
       case productListFilterScreen:
-        List<dynamic> productListFilterArguments =
-            settings.arguments as List<dynamic>;
+        List<dynamic> productListFilterArguments = settings.arguments as List<dynamic>;
         return CupertinoPageRoute(
           builder: (_) => ChangeNotifierProvider<ProductFilterProvider>(
             create: (context) => ProductFilterProvider(),
