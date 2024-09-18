@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import '../model/BanksListModel.dart';
 import '../model/BannersModel.dart';
 import '../model/LogInModel.dart';
+import '../model/OperaterModel.dart';
 import '../model/OtpModel.dart';
 import '../model/RegisterModel.dart';
 import '../model/UserProfileModel.dart';
@@ -279,6 +280,30 @@ class Userapi {
       return null;
     }
   }
+
+  static Future<GetOperaterModel?> OperatoerDetailsApi(String accessToken) async {
+    try {
+      final headers = {
+        'Authorization': 'Bearer $accessToken'};
+      String url = "${host}/api/list_of_mobile_prepaid_operators";
+      print("${url}");
+
+      http.Response response = await http.get(
+        Uri.parse(url),
+        headers: headers,
+      );
+      if (response.body!=null) {
+        final jsonResponse = jsonDecode(response.body);
+        print("Register Data:${response.body}");
+        return GetOperaterModel.fromJson(jsonResponse);
+      }
+    } catch (e) {
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+
 
 
 
