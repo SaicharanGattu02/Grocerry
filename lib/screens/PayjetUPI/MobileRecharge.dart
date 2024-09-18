@@ -78,7 +78,7 @@ class _MobileRechargeState extends State<MobileRecharge> {
   @override
   void initState() {
     super.initState();
-    // Reset validation errors when user types
+
     _mobileNumberController.addListener(() {
       setState(() {
         _validateMobileNumber = "";
