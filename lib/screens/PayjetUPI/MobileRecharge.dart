@@ -2,8 +2,12 @@ import 'package:egrocer/screens/PayjetUPI/services/Preferances.dart';
 import 'package:egrocer/screens/PayjetUPI/services/userapi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../../helper/utils/ShakeWidget.dart';
+import '../../helper/utils/generalImports.dart';
 import '../../models/languageJsonData.dart';
+
+enum InputType { numeric, text }
 
 class MobileRecharge extends StatefulWidget {
   const MobileRecharge({super.key});
@@ -16,31 +20,19 @@ class _MobileRechargeState extends State<MobileRecharge> {
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _tpinController = TextEditingController();
+  final TextEditingController _sendernameController = TextEditingController();
+  final TextEditingController _operaterController = TextEditingController();
 
   String _selectedOperator = "";
   String _validateMobileNumber = "";
   String _validateAmount = "";
+  String _validateName = "";
   String _validateOperator = "";
   String _validateTpin = "";
 
   bool _isLoading = false;
-
-  // List of operators for the dropdown
-  List<Data>? _operators =[];
-
-  Future<void> GetOperateDetails() async {
-    var accessToken = await PreferenceService().getString("access_token");
-    if (accessToken != null) {
-      final response = await Userapi.OperatoerDetailsApi(accessToken);
-
-      if (response != null) {
-        setState(() {
-          // _operators = response.data ?? ;
-        });
-      }
-    }
-  }
-
+  Map<String, int> operatorMap = {};
+  int? selectedOperatorId;
 
   void _validateFields() {
     setState(() {
@@ -71,10 +63,6 @@ class _MobileRechargeState extends State<MobileRecharge> {
     });
   }
 
-
-
-
-
   @override
   void initState() {
     super.initState();
@@ -99,6 +87,20 @@ class _MobileRechargeState extends State<MobileRecharge> {
     GetOperateDetails();
   }
 
+
+  Future<void> GetOperateDetails() async {
+      final response = await Userapi.OperatoerDetailsApi();
+      if (response != null) {
+        setState(() {
+          operatorMap = {
+            for (var item in response.data ?? [])
+              item.name ?? '': item.operatorId ?? 0,
+          };
+        });
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -108,7 +110,9 @@ class _MobileRechargeState extends State<MobileRecharge> {
         title: const Text(
           "Mobile Recharge",
           style: TextStyle(
-              fontFamily: "Inter", fontSize: 18, fontWeight: FontWeight.w500),
+              fontFamily: "Inter",
+              fontSize: 18,
+              fontWeight: FontWeight.w500),
         ),
       ),
       body: Padding(
@@ -125,9 +129,9 @@ class _MobileRechargeState extends State<MobileRecharge> {
                     _buildTextFormField(
                       controller: _mobileNumberController,
                       label: 'Mobile Number',
-                      validation: _validateMobileNumber,
                       length: 10,
-                      keyboardType: TextInputType.phone,
+                      validation: _validateMobileNumber,
+                      keyboardType: InputType.numeric,
                     ),
                     _buildSectionLabel("Select Your Operator"),
                     _buildDropdownField(),
@@ -136,16 +140,22 @@ class _MobileRechargeState extends State<MobileRecharge> {
                       controller: _amountController,
                       label: 'Enter amount',
                       validation: _validateAmount,
-                      keyboardType: TextInputType.number,
+                      keyboardType: InputType.numeric,
                     ),
-                    _buildSectionLabel("Tpin"),
+                    _buildSectionLabel("Sender Name"),
                     _buildTextFormField(
-                      controller: _tpinController,
-                      validation: _validateTpin,
-                      label: 'Enter Tpin',
-                      obscureText: true,
-                      keyboardType: TextInputType.number,
+                      controller: _sendernameController,
+                      label: 'Enter name',
+                      validation: _validateName,
+                      keyboardType: InputType.text,
                     ),
+                    // _buildTextFormField(
+                    //   controller: _tpinController,
+                    //   validation: _validateTpin,
+                    //   label: 'Enter Tpin',
+                    //   obscureText: true,
+                    //   keyboardType: TextInputType.number,
+                    // ),
                     const SizedBox(height: 20),
                     _buildSubmitButtons(w)
                   ],
@@ -236,9 +246,24 @@ class _MobileRechargeState extends State<MobileRecharge> {
     Widget? suffixIcon,
     int? length,
     bool obscureText = false,
-    TextInputType keyboardType = TextInputType.text,
+    InputType keyboardType = InputType.text, // New parameter to specify input type
     Color suffixIconColor = const Color(0xff2C2C2C),
   }) {
+    // Create a list of input formatters
+    List<TextInputFormatter> inputFormatters = [];
+
+    // Determine input formatters based on inputType
+    if (keyboardType == InputType.numeric) {
+      inputFormatters.add(FilteringTextInputFormatter.digitsOnly); // Allow only digits
+      if (length != null && length > 0) {
+        inputFormatters.add(LengthLimitingTextInputFormatter(length)); // Restrict to specified length
+      }
+    } else {
+      // For text input, you can customize further if needed
+      // For example, to allow letters only (you can adjust this as required)
+      inputFormatters.add(FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))); // Allow letters and spaces
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
@@ -249,9 +274,7 @@ class _MobileRechargeState extends State<MobileRecharge> {
             child: TextFormField(
               controller: controller,
               cursorColor: Colors.black,
-              maxLength: length,
               decoration: InputDecoration(
-                counterText: "", // Hides the character counter
                 hintText: label,
                 hintStyle: const TextStyle(
                   fontSize: 14,
@@ -279,7 +302,10 @@ class _MobileRechargeState extends State<MobileRecharge> {
                     : null,
               ),
               obscureText: obscureText,
-              keyboardType: keyboardType,
+              keyboardType: keyboardType == InputType.numeric
+                  ? TextInputType.number
+                  : TextInputType.text,
+              inputFormatters: inputFormatters, // Use the dynamically created list
             ),
           ),
           if (validation.isNotEmpty) ...[
@@ -316,38 +342,72 @@ class _MobileRechargeState extends State<MobileRecharge> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DropdownButtonFormField<String>(
-            value: _selectedOperator.isEmpty ? null : _selectedOperator,
-            hint: const Text(
-              'Select your operator',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontFamily: "Inter",
-                color: Color(0xff8298AF),
-              ),
-            ),
-            items: _operators,
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedOperator = newValue ?? "";
-                _validateOperator = ""; // Reset validation error
-              });
-            },
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: const Color(0xffF2F8FF),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(width: 1, color: Color(0xff8298AF)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(width: 1, color: Color(0xff8298AF)),
-              ),
+      TypeAheadFormField<String>(
+      textFieldConfiguration: TextFieldConfiguration(
+        controller: _operaterController,
+        onTap: () {
+          setState(() {});
+        },
+        onChanged: (v) {
+          setState(() {});
+        },
+        style: TextStyle(
+          fontSize: 16,
+          letterSpacing: 0,
+          height: 1.2,
+          color: Colors.black,
+          fontWeight: FontWeight.w400,
+        ),
+        decoration: InputDecoration(
+          hintText: "Enter operator name",
+          hintStyle: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            fontFamily: "Inter",
+            color: Color(0xff8298AF),
+          ),
+          suffixIcon: Icon(Icons.arrow_drop_down),
+          filled: true,
+          fillColor: const Color(0xffF2F8FF),
+          contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16.0, vertical: 14.0),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            borderSide: const BorderSide(width: 1, color: Color(0xff8298AF)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            borderSide: const BorderSide(width: 1, color: Color(0xff8298AF)),
+          ),
+        ),
+      ),
+        suggestionsCallback: (pattern) {
+          return operatorMap.keys.where((item) =>
+              item.toLowerCase().contains(pattern.toLowerCase())).toList();
+        },
+      itemBuilder: (context, suggestion) {
+        return ListTile(
+          title: Text(suggestion,
+            style: TextStyle(
+              fontSize: 15,
+              fontFamily: "Inter",
+              fontWeight: FontWeight.w400,
             ),
           ),
+        );
+      },
+        onSuggestionSelected: (suggestion) {
+          _operaterController.text = suggestion;
+          selectedOperatorId = operatorMap[suggestion];
+          print("id:${operatorMap[suggestion]}");// Set selected ID
+        },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please select an item';
+        }
+        return null;
+      },
+    ),
           if (_validateOperator.isNotEmpty) ...[
             Container(
               alignment: Alignment.topLeft,

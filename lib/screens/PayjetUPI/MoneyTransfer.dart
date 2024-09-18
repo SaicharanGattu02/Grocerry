@@ -1,4 +1,5 @@
 import 'package:egrocer/screens/PayjetUPI/services/userapi.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../../helper/utils/generalImports.dart';
 import 'model/BanksListModel.dart';
 
@@ -19,8 +20,9 @@ class _MoneytransferState extends State<Moneytransfer> {
   final TextEditingController accountHolderNameController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final TextEditingController senderNameController = TextEditingController();
+  final TextEditingController bankController = TextEditingController();
 
-  final List<String> banks = ['Bank A', 'Bank B', 'Bank C'];
+
   final List<String> beneficiaryTypes = ['Savings', 'Current'];
 
   @override
@@ -29,17 +31,14 @@ class _MoneytransferState extends State<Moneytransfer> {
     super.initState();
   }
 
-  BanksListModel? selectedBank;
-  List<BanksListModel> bankslist=[];
+  List<BanksListModel> banks=[];
+  int? selectedBankId;
 
   Future<void> GetBanksList() async {
-    final response = await Userapi.GetBanksListApi();
+    final response = await Userapi.getBanksListApi();
     if (response != null) {
       setState(() {
-        bankslist = response;
-        if (bankslist.isNotEmpty) {
-          selectedBank = bankslist.first;
-        }
+        banks = response;
       });
     }
   }
@@ -171,17 +170,43 @@ class _MoneytransferState extends State<Moneytransfer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildSectionLabel("Select Bank"),
-                _buildDropdownField<BanksListModel>(
-                  value: selectedBank,
-                  hint: 'Select Bank',
-                  items: bankslist,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedBank = value!;
-                    });
-                  },
-                  validator: (value) => value == null ? 'Please select a bank' : null,
+              TypeAheadFormField<BanksListModel>(
+                textFieldConfiguration: TextFieldConfiguration(
+                  controller: bankController,
+                  decoration: InputDecoration(
+                    hintText: "Enter bank name",
+                    filled: true,
+                    fillColor: const Color(0xffF2F8FF),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      borderSide: const BorderSide(width: 1, color: Color(0xff8298AF)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      borderSide: const BorderSide(width: 1, color: Color(0xff8298AF)),
+                    ),
+                  ),
                 ),
+                suggestionsCallback: (pattern) {
+                  return banks.where((bank) =>
+                      bank.bANKNAME!.toLowerCase().contains(pattern.toLowerCase())).toList();
+                },
+                itemBuilder: (context, BanksListModel suggestion) {
+                  return ListTile(
+                    title: Text(suggestion.bANKNAME!),
+                  );
+                },
+                onSuggestionSelected: (BanksListModel suggestion) {
+                  bankController.text = suggestion.bANKNAME!;
+                  selectedBankId = suggestion.bankID; // Set selected ID
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select a bank';
+                  }
+                  return null;
+                },
+              ),
                 SizedBox(height: 16),
                 _buildSectionLabel("Transaction Type"),
                 Row(

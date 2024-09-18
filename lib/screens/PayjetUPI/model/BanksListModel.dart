@@ -6,13 +6,14 @@ class BanksListModel {
   String? nEFTStatus;
   String? vERIFICATION;
 
-  BanksListModel(
-      {this.bankID,
-        this.bANKNAME,
-        this.bANKCODE,
-        this.iMPSStatus,
-        this.nEFTStatus,
-        this.vERIFICATION});
+  BanksListModel({
+    this.bankID,
+    this.bANKNAME,
+    this.bANKCODE,
+    this.iMPSStatus,
+    this.nEFTStatus,
+    this.vERIFICATION,
+  });
 
   BanksListModel.fromJson(Map<String, dynamic> json) {
     bankID = json['BankID'];
@@ -24,13 +25,13 @@ class BanksListModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['BankID'] = this.bankID;
-    data['BANK_NAME'] = this.bANKNAME;
-    data['BANK CODE'] = this.bANKCODE;
-    data['IMPS_Status'] = this.iMPSStatus;
-    data['NEFT_Status'] = this.nEFTStatus;
-    data['VERIFICATION'] = this.vERIFICATION;
-    return data;
+    return {
+      'BankID': bankID,
+      'BANK_NAME': bANKNAME,
+      'BANK CODE': bANKCODE,
+      'IMPS_Status': iMPSStatus,
+      'NEFT_Status': nEFTStatus,
+      'VERIFICATION': vERIFICATION,
+    };
   }
 }

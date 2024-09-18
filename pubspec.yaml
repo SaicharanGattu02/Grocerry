@@ -80,6 +80,7 @@ dependencies:
   paytm_allinonesdk: ^1.2.6
   carousel_slider: ^5.0.0
   pin_code_fields: ^8.0.1
+  flutter_typeahead: ^4.0.0
 
 dependency_overrides:
   http: ^1.0.0

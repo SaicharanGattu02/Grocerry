@@ -265,7 +265,7 @@ class MyAppState extends State<MyApp> {
                     GlobalMaterialLocalizations.delegate,
                     GlobalWidgetsLocalizations.delegate,
                   ],
-                  home:Splash()
+                  home:SplashScreen()
                 ),
               );
             },

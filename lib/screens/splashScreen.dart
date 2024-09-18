@@ -9,9 +9,7 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState
-    extends State<SplashScreen> /*
-    with TickerProviderStateMixin */
+class _SplashScreenState extends State<SplashScreen>
 {
   late PackageInfo packageInfo;
   String currentAppVersion = "1.0.0";

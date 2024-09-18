@@ -12,7 +12,7 @@ import '../model/UserProfileModel.dart';
 
 class Userapi {
   static const host = "http://192.168.0.230:8000/api";
-  static const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTkyLjE2OC4wLjIzMDo4MDAwL2FwaS9sb2dpbiIsImlhdCI6MTcyNjU3Njc3OSwiZXhwIjoxNzI2NTgwMzc5LCJuYmYiOjE3MjY1NzY3NzksImp0aSI6ImJVbncwVnlSTHBpeHhyRkQiLCJzdWIiOiI0NSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.wcXcT2hyeRQ6YEsj7GKW5D5jo4_swErgMMjIBUURPvY";
+  static const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTkyLjE2OC4wLjIzMDo4MDAwL2FwaS9sb2dpbiIsImlhdCI6MTcyNjY1NzYyNCwiZXhwIjoxNzI2NjYxMjI0LCJuYmYiOjE3MjY2NTc2MjQsImp0aSI6ImNzVjJZSFV5dnNYN3YzZWciLCJzdWIiOiI0NSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.56gnGeFhT2j0KmMHtH15tuLZHCcVH2CxuawumS_gYtw";
 
   static Future<RegisterModel?> RegisterPost(
       String fname,
@@ -72,7 +72,7 @@ class Userapi {
       });
       print(" body>>${body}");
       final headers = {'Content-Type': 'application/json'};
-      String url ="${host}/api/login";
+      String url ="${host}/login";
       print("${url}");
 
       http.Response response = await http.post(
@@ -147,7 +147,7 @@ class Userapi {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',  // Add the Bearer token here
       };
-      String url = "${host}/api/profile";
+      String url = "${host}/profile";
       print("${url}");
 
       http.Response response = await http.get(Uri.parse(url), headers: headers);
@@ -172,7 +172,7 @@ class Userapi {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',  // Add the Bearer token here
       };
-      String url ="${host}/api/all_banners";
+      String url ="${host}/all_banners";
       print("${url}");
       http.Response response = await http.get(Uri.parse(url), headers: headers,);
       if (response.body != null) {
@@ -201,7 +201,7 @@ class Userapi {
       });
       print(" body>>${body}");
       final headers = {'Content-Type': 'application/json'};
-      String url ="${host}/api/password/send-otp";
+      String url ="${host}/password/send-otp";
       print("${url}");
 
       http.Response response = await http.post(
@@ -239,7 +239,7 @@ class Userapi {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',  // Add the Bearer token here
       };
-      String url ="${host}/api/password/send-otp";
+      String url ="${host}/password/send-otp";
       print("${url}");
 
       http.Response response = await http.post(
@@ -258,21 +258,30 @@ class Userapi {
     }
   }
 
-  static Future<List<BanksListModel>?> GetBanksListApi() async {
+
+  static Future<List<BanksListModel>?> getBanksListApi() async {
     try {
       final headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       };
       String url = "${host}/bank_details";
-      print("${url}");
+      print("Request URL: $url");
+
       http.Response response = await http.get(Uri.parse(url), headers: headers);
+
+      print("Response Status: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+
       if (response.statusCode == 200) {
+        // If the response is a list, decode it directly
         final List<dynamic> jsonResponse = jsonDecode(response.body);
-        print("GetBanksListApi Data: ${response.body}");
+        print("Parsed JSON: $jsonResponse");
+
+        // Map the list to BanksListModel objects
         return jsonResponse.map((json) => BanksListModel.fromJson(json)).toList();
       } else {
-        print("Failed to load banks list");
+        print("Failed to load banks list: ${response.statusCode}");
         return null;
       }
     } catch (e) {
@@ -281,11 +290,13 @@ class Userapi {
     }
   }
 
-  static Future<GetOperaterModel?> OperatoerDetailsApi(String accessToken) async {
+
+
+  static Future<GetOperaterModel?> OperatoerDetailsApi() async {
     try {
       final headers = {
-        'Authorization': 'Bearer $accessToken'};
-      String url = "${host}/api/list_of_mobile_prepaid_operators";
+        'Authorization': 'Bearer $token'};
+      String url = "${host}/list_of_mobile_prepaid_operators";
       print("${url}");
 
       http.Response response = await http.get(
