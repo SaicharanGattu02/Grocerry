@@ -3,6 +3,8 @@ import 'package:egrocer/screens/PayjetUPI/PayJetSplashScreen.dart';
 import 'package:egrocer/screens/PayjetUPI/Register.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'firebase_options.dart';
+
 late final SharedPreferences prefs;
 
 Future<void> main() async {
@@ -10,16 +12,9 @@ Future<void> main() async {
 
   prefs = await SharedPreferences.getInstance();
   try {
-    Platform.isAndroid
-        ? await Firebase.initializeApp(
-      options: FirebaseOptions(
-        apiKey: "AIzaSyC8OXXVmzmgtnuZ0GqPO6niXj774LutKkA",
-        appId: "1:964965168805:android:45fc5d1b4017a363cbff4c",
-        messagingSenderId: "964965168805",
-        projectId: "payjet-bc921",
-      ),
-    )
-        : await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
   } catch (_) {}

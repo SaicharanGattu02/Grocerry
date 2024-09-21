@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:egrocer/screens/PayjetUPI/model/PlatformChargesModel.dart';
 import 'package:http/http.dart' as http;
 
 import '../model/BanksListModel.dart';
@@ -12,7 +13,7 @@ import '../model/UserProfileModel.dart';
 
 class Userapi {
   static const host = "http://192.168.0.230:8000/api";
-  static const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTkyLjE2OC4wLjIzMDo4MDAwL2FwaS9sb2dpbiIsImlhdCI6MTcyNjY1NzYyNCwiZXhwIjoxNzI2NjYxMjI0LCJuYmYiOjE3MjY2NTc2MjQsImp0aSI6ImNzVjJZSFV5dnNYN3YzZWciLCJzdWIiOiI0NSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.56gnGeFhT2j0KmMHtH15tuLZHCcVH2CxuawumS_gYtw";
+  static const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTkyLjE2OC4wLjIzMDo4MDAwL2FwaS9sb2dpbiIsImlhdCI6MTcyNjcyNzk2NywiZXhwIjoxNzI2NzMxNTY3LCJuYmYiOjE3MjY3Mjc5NjcsImp0aSI6IktRckw4NWkyRnpNR2dud1YiLCJzdWIiOiI0NSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.gFeFvUieWx6UiekrO_SYKg8LW8q_vqd347rxDhUd8SE";
 
   static Future<RegisterModel?> RegisterPost(
       String fname,
@@ -251,6 +252,35 @@ class Userapi {
         final jsonResponse = jsonDecode(response.body);
         print("Recharge:${response.body}");
         return LogInModel.fromJson(jsonResponse);
+      }
+    } catch (e) {
+      print("Error occurred: $e");
+      return null;
+    }
+  }
+
+  static Future<PlatformChargesModel?>PaltformChargesApi(String amount) async {
+    try {
+      final body = jsonEncode({
+        "val": amount,
+      });
+      print(" body>>${body}");
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',  // Add the Bearer token here
+      };
+      String url ="${host}/platform_charges";
+      print("${url}");
+
+      http.Response response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+      if (response.body != null) {
+        final jsonResponse = jsonDecode(response.body);
+        print("PaltformChargesApi:${response.body}");
+        return PlatformChargesModel.fromJson(jsonResponse);
       }
     } catch (e) {
       print("Error occurred: $e");

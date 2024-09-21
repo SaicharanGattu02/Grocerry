@@ -6,6 +6,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../../helper/utils/ShakeWidget.dart';
 import '../../helper/utils/generalImports.dart';
 import '../../models/languageJsonData.dart';
+import 'model/PlatformChargesModel.dart';
 
 enum InputType { numeric, text }
 
@@ -61,6 +62,19 @@ class _MobileRechargeState extends State<MobileRecharge> {
         // Call your method to proceed with the action
       }
     });
+  }
+
+
+  PlatformChargesModel data = PlatformChargesModel();
+  Future<void>GetPlatformCharges() async {
+    final response = await Userapi.PaltformChargesApi(_amountController.text);
+    if(response!=null){
+      setState(() {
+        if (response?.status == true) {
+          data = response;
+        }
+      });
+    }
   }
 
   @override
@@ -149,6 +163,32 @@ class _MobileRechargeState extends State<MobileRecharge> {
                       validation: _validateName,
                       keyboardType: InputType.text,
                     ),
+                      if(data.pfCharges!=null)...[
+                        Text(
+                          "Platform Charges: ${data.pfCharges}",
+                          style: const TextStyle(
+                            fontFamily: "Inter",
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          "Actual Amount: ${data.actualAmount}",
+                          style: const TextStyle(
+                            fontFamily: "Inter",
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          "Amount After Platform Charges: ${data.afterPfCharges}",
+                          style: const TextStyle(
+                            fontFamily: "Inter",
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     // _buildTextFormField(
                     //   controller: _tpinController,
                     //   validation: _validateTpin,
@@ -274,6 +314,11 @@ class _MobileRechargeState extends State<MobileRecharge> {
             child: TextFormField(
               controller: controller,
               cursorColor: Colors.black,
+              onChanged: (v){
+                 if(label=="Enter amount" && v.length>1){
+                  GetPlatformCharges();
+                }
+              },
               decoration: InputDecoration(
                 hintText: label,
                 hintStyle: const TextStyle(
