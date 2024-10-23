@@ -319,7 +319,7 @@ class _SplashScreenState extends State<SplashScreen>
               );
             } else {
               return Scaffold(
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                backgroundColor: Color(0xff51BD88),
                 body: Center(
                   child: Container(
                     constraints: BoxConstraints(
@@ -327,7 +327,7 @@ class _SplashScreenState extends State<SplashScreen>
                       maxWidth: 150,
                     ),
                     child: defaultImg(
-                      image: 'logo',
+                      image: 'payjetlogo',
                     ),
                   ),
                 ),

@@ -73,7 +73,8 @@ android {
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
-            signingConfig signingConfigs.release
+        //    signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

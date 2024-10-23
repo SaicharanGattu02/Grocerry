@@ -30,7 +30,9 @@ class _LoginAccountState extends State<LoginAccount> {
   int? forceResendingToken;
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  GoogleSignIn googleSignIn = GoogleSignIn();
+  GoogleSignIn googleSignIn = GoogleSignIn(
+      scopes: ['profile','email']
+  );
 
   AuthProviders? authProvider;
 
@@ -252,6 +254,9 @@ class _LoginAccountState extends State<LoginAccount> {
             getSizedBox(height: 10),
           ],
           if (Constant.authTypeGoogleLogin == "1")
+            getSizedBox(
+              height: Constant.size40,
+            ),
             Padding(
               padding: EdgeInsetsDirectional.only(start: 20, end: 20),
               child: SocialMediaLoginButtonWidget(
