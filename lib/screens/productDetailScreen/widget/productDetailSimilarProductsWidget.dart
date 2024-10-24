@@ -35,19 +35,21 @@ class _ProductDetailSimilarProductsWidgetState
 
   callApi() async {
     try {
-      context.read<ProductListProvider>().offset = 0;
+      if (widget.slug.isEmpty || widget.tags.toString() == "null") {
+        context.read<ProductListProvider>().offset = 0;
 
-      context.read<ProductListProvider>().products = [];
+        context.read<ProductListProvider>().products = [];
 
-      Map<String, String> params = await Constant.getProductsDefaultParams();
+        Map<String, String> params = await Constant.getProductsDefaultParams();
 
-      params[ApiAndParams.sort] = "0";
-      params[ApiAndParams.tagNames] = widget.tags.toString();
-      params[ApiAndParams.tagSlug] = widget.slug.toString();
+        params[ApiAndParams.sort] = "0";
+        params[ApiAndParams.tagNames] = widget.tags.toString();
+        params[ApiAndParams.tagSlug] = widget.slug.toString();
 
-      await context
-          .read<ProductListProvider>()
-          .getProductListProvider(context: context, params: params);
+        await context
+            .read<ProductListProvider>()
+            .getProductListProvider(context: context, params: params);
+      }
     } catch (_) {}
   }
 
