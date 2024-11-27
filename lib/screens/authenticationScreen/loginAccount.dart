@@ -583,7 +583,6 @@ class _LoginAccountState extends State<LoginAccount> {
       ],
     );
   }
-
   @override
   void dispose() {
     super.dispose();

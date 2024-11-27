@@ -181,7 +181,7 @@ class HomeMainScreenState extends State<HomeMainScreen> {
         if (index == 0) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ComingSoonScreen()),
+            MaterialPageRoute(builder: (context) => PayjetDashboard()),
           );
         } else if (index == 1) {
           Navigator.push(
